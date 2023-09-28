@@ -109,7 +109,7 @@ class OracleAccessManagement(Script):
 
         to_date = (datetime.utcnow() - timedelta(minutes=1)).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
-        url = f"{base_url}{ENDPOINT}?fromDate={from_date}&toDate={to_date}&pageSize=100"
+        url = f"{base_url}{ENDPOINT}?fromDate={from_date}&toDate={to_date}&pageSize=10000"
         
         encoded_url = urllib.parse.quote(url, safe=':/?&=')
         
