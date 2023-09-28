@@ -21,7 +21,7 @@ class OracleAccessManagement(Script):
         scheme = Scheme("Oracle Access Management")
         scheme.use_external_validation = False
         scheme.use_single_instance = False
-        scheme.description = "The Oracle Access Manager APIs for Audit Events"
+        scheme.description = "The Oracle Access Management APIs for Audit Events"
 
         base_url = Argument("base_url")
         base_url.title = "Tenant hostname"
