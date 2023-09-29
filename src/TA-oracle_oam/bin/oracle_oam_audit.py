@@ -103,7 +103,7 @@ class OracleAccessManagement(Script):
         
         ENDPOINT = "/oam/services/rest/access/api/v1/audit/events/1"
         
-        interval = interval + 60
+        interval = ((interval) / 60) + 1
 
         from_date = (datetime.utcnow() - timedelta(minutes=interval)).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
