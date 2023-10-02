@@ -52,20 +52,22 @@ class OracleAccessManagement(Script):
     def validate_input(self, definition):
         pass
 
-    def encrypt_keys(self, _oam_username, _oam_password, _session_key):
+    def encrypt_keys(self, _input_name, _oam_tenant, _oam_username, _oam_password, _session_key):
 
         args = {'token': _session_key}
         service = client.connect(**args)
 
-        credentials = {"oamUsername": _oam_username, "oamPassword": _oam_password}
+        credentials = {"oamTenant": _oam_tenant, "oamUsername": _oam_username, "oamPassword": _oam_password}
+        
+        uname = f"{_input_name}___{_oam_username}"
 
         try:
             for storage_password in service.storage_passwords:
-                if storage_password.username == _oam_username:
+                if storage_password.username == uname:
                     service.storage_passwords.delete(username=storage_password.username)
                     break
 
-            service.storage_passwords.create(json.dumps(credentials), _oam_username)
+            service.storage_passwords.create(json.dumps(credentials), uname)
 
         except Exception as e:
             raise Exception("Error encrypting: %s" % str(e))
@@ -90,13 +92,15 @@ class OracleAccessManagement(Script):
         except Exception as e:
             raise Exception("Error updating inputs.conf: %s" % str(e))
 
-    def decrypt_keys(self, _oam_username, _session_key):
+    def decrypt_keys(self, _input_name, _oam_username, _session_key):
 
         args = {'token': _session_key}
         service = client.connect(**args)
+        
+        uname = f"{_input_name}___{_oam_username}"
 
         for storage_password in service.storage_passwords:
-            if storage_password.username == _oam_username:
+            if storage_password.username == uname:
                 return storage_password.content.clear_password
     
     def get_oam_audit_events(self, base_url, username, password, interval=900):
@@ -140,10 +144,10 @@ class OracleAccessManagement(Script):
         try:
             
             if oam_password != self.MASK:
-                self.encrypt_keys(oam_username, oam_password, session_key)
+                self.encrypt_keys(self.input_name, base_url, oam_username, oam_password, session_key)
                 self.mask_credentials(self.input_name, session_key, base_url, oam_username)
 
-            decrypted = self.decrypt_keys(oam_username, session_key)
+            decrypted = self.decrypt_keys(self.input_name, oam_username, session_key)
             self.CREDENTIALS = json.loads(decrypted)
 
             oam_password = self.CREDENTIALS["oamPassword"]
