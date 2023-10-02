@@ -52,12 +52,12 @@ class OracleAccessManagement(Script):
     def validate_input(self, definition):
         pass
 
-    def encrypt_keys(self, _oam_username, _oam_password, _session_key):
+    def encrypt_keys(self, _oam_tenant, _oam_username, _oam_password, _session_key):
 
         args = {'token': _session_key}
         service = client.connect(**args)
 
-        credentials = {"oamUsername": _oam_username, "oamPassword": _oam_password}
+        credentials = {"oamTenant": _oam_tenant, "oamUsername": _oam_username, "oamPassword": _oam_password}
 
         try:
             for storage_password in service.storage_passwords:
@@ -140,7 +140,7 @@ class OracleAccessManagement(Script):
         try:
             
             if oam_password != self.MASK:
-                self.encrypt_keys(oam_username, oam_password, session_key)
+                self.encrypt_keys(base_url, oam_username, oam_password, session_key)
                 self.mask_credentials(self.input_name, session_key, base_url, oam_username)
 
             decrypted = self.decrypt_keys(oam_username, session_key)
