@@ -1,11 +1,11 @@
 {
   "schemaVersion": "2.0.0",
   "info": {
-    "title": "Oracle Access Manager Audit Events",
+    "title": "Oracle Access Management Audit Events",
     "id": {
       "group": null,
       "name": "TA-oracle_oam",
-      "version": "1.3.0"
+      "version": "1.4.0"
     },
     "author": [
       {
@@ -15,7 +15,7 @@
       }
     ],
     "releaseDate": null,
-    "description": "Uses the REST API for Oracle Access Manager - Audit Events v1 Endpoint",
+    "description": "Uses the REST API for Oracle Access Management - Audit Events v1 Endpoint",
     "classification": {
       "intendedAudience": null,
       "categories": [],
